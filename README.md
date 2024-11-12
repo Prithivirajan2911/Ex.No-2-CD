@@ -1,15 +1,11 @@
 # Ex-2-GENERATION OF LEXICAL TOKENS LEX FLEX TOOL
-## REGISTER NUMBER:212223100042
-## NAME: PRITHIVIRAJAN V
-## DATE:26.09.2024
 # AIM
-To write a lex program to implement lexical analyzer to recognize a few patterns.
+## To write a lex program to implement lexical analyzer to recognize a few patterns.
 # ALGORITHM
 
 1.	Start the program.
 
 2.	Lex program consists of three parts.
-
      a.	Declaration %%
 
      b.	Translation rules %%
@@ -18,7 +14,6 @@ To write a lex program to implement lexical analyzer to recognize a few patterns
 
 3.	The declaration section includes declaration of variables, maintest, constants and regular definitions.
 4.	Translation rule of lex program are statements of the form
-
     a.	P1 {action}
 
     b.	P2 {action}
@@ -34,70 +29,51 @@ To write a lex program to implement lexical analyzer to recognize a few patterns
 6.	Compile the lex program with lex compiler to produce output file as lex.yy.c. eg $ lex filename.l $ cc lex.yy.c
 7.	Compile that file with C compiler and verify the output.
 
-# PROGRAM:
-## exp2.l
+# INPUT
+Ex02.l
 ```
 %{
-#include <stdio.h>
-#include <stdlib.h>
-int COMMENT = 0;
+/* program to recognize a C program */ int COMMENT = 0;
 %}
-
 identifier [a-zA-Z][a-zA-Z0-9]*
-
 %%
-#.* { printf("PREPROCESSOR DIRECTIVE: %s\n", yytext); }
-int|float|char|double|while|for|do|if|break|continue|void|switch|case|long|struct|const|typedef|return|else|goto { printf("KEYWORD: %s\n", yytext); }
-"//".* { /* Ignore single-line comments */ }
+#.* { printf("\n%s is a PREPROCESSOR DIRECTIVE", yytext); } 
+int|float|char|double|while|for|do|if|break|continue|void|switch|case|long|struct|const
+  |typedef|return|else|goto { printf("\n\t%s is a KEYWORD", yytext); }
 "/*" { COMMENT = 1; }
 "*/" { COMMENT = 0; }
-[0-9]+ { printf("NUMBER: %s\n", yytext); }
-\".*?\" { printf("STRING: %s\n", yytext); }  // Recognize strings
-{identifier} { printf("IDENTIFIER: %s\n", yytext); }
-\{ { printf("BLOCK BEGINS\n"); }
-\} { printf("BLOCK ENDS\n"); }
-"=" { printf("ASSIGNMENT OPERATOR: %s\n", yytext); }   // Assignment operator
-"<="|">="|"<"|">"|"==" { printf("RELATIONAL OPERATOR: %s\n", yytext); }  // Relational operators
-
-
+{identifier}\( { if (!COMMENT) printf("\n\nFUNCTION\n\t%s", yytext); }
+\{ { if (!COMMENT) printf("\n BLOCK BEGINS"); }
+\} { if (!COMMENT) printf("\n BLOCK ENDS"); }
+{identifier}(\[[0-9]*\])? { if (!COMMENT) printf("\n %s IDENTIFIER", yytext); }
+\".*\" { if (!COMMENT) printf("\n\t%s is a STRING", yytext); }
+[0-9]+ { if (!COMMENT) printf("\n\t%s is a NUMBER", yytext); }
+\)(\;)? { if (!COMMENT) printf("\n\t"); ECHO; printf("\n"); }
+\( ECHO;
+= { if (!COMMENT) printf("\n\t%s is an ASSIGNMENT OPERATOR", yytext); }
+\<=|\>=|\<|==|\> { if (!COMMENT) printf("\n\t%s is a RELATIONAL OPERATOR", yytext); }
 %%
-
-int main(int argc, char **argv) {
-    if (argc > 1) {
-        FILE *file = fopen(argv[1], "r");
-        if (!file) {
-            printf("Could not open %s\n", argv[1]);
-            exit(1);
-        }
-        yyin = file; // Set input to the file
-        printf("Reading from file: %s\n", argv[1]); // Debugging output
-    }
-    yylex();
-    return 0;
+int main(int argc, char **argv) { if (argc > 1) {
+FILE *file;
+file = fopen(argv[1], "r"); if (!file) {
+printf("could not open %s \n", argv[1]); exit(0);
 }
-
-int yywrap() {
-    return 0;
+yyin = file;
+}
+yylex(); printf("\n\n"); return 0;
+}
+int yywrap() { return 0;
 }
 ```
-## var.c
+var.c
 ```
-#include<stdio.h>
-int main()
-{
-int a,b;
+#include<stdio.h> 
+int main(){
+int a,b; 
 return 0;
 }
 ```
-## Commands:
-```
-lex exp2.l 
-gcc lex.yy.c
-./a.out var.c
-```
-
-# OUTPUT:
-![377333981-8f4624f8-eb63-4223-81df-65c90a81afb8](https://github.com/user-attachments/assets/3532400a-4cbc-4d57-a2a9-489f51caf944)
-
+# OUTPUT
+![WhatsApp Image 2024-10-17 at 08 25 34_38f1f1a5](https://github.com/user-attachments/assets/9447fabf-60f9-44ec-85e8-2e6162df4fba)
 # RESULT
-The lexical analyzer is implemented using lex and the output is verified.
+## The lexical analyzer is implemented using lex and the output is verified.
