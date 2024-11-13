@@ -75,6 +75,6 @@ return 0;
 }
 ```
 # OUTPUT
-![output](![image](https://github.com/user-attachments/assets/e64fad9a-187a-4129-a85b-e831e132d766)
+![image](https://github.com/user-attachments/assets/e64fad9a-187a-4129-a85b-e831e132d766)
 # RESULT
 The lexical analyzer is implemented using lex and the output is verified.
